@@ -45,6 +45,7 @@
     ]
   },
   "devDependencies": {
-    "eslint-config-react-app": "^6.0.0"
+    "eslint-config-react-app": "^6.0.0",
+    "eslint-plugin-react": "^7.22.0"
   }
 }

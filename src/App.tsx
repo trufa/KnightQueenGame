@@ -1,12 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
-//@ts-ignore
+// @ts-ignore
 import Chessground from 'react-chessground';
 import 'react-chessground/dist/styles/chessground.css';
 import './App.css';
+// eslint-disable-line
 import { ChessInstance, Square } from 'chess.js';
 import Confetti from 'react-confetti';
 import KofiComp from './Kofi';
 
+// @ts-ignore
 const ChessReq: any = require('chess.js');
 const Chess: ChessInstance = new ChessReq('7N/8/8/3q4/8/8/8/8 w - - 0 1');
 
@@ -130,7 +132,7 @@ function useInterval (callback: IntervalFunction, delay: number | null) {
     }
 
     if (delay !== null) {
-      let id = setInterval(tick, delay);
+      const id = setInterval(tick, delay);
       return () => clearInterval(id);
     }
   }, [delay]);
@@ -242,7 +244,7 @@ function App () {
       setWon(true);
     }
 
-  }, [move, isTimerRunning, lost, won]);
+  }, [move, isTimerRunning, lost, won, elapsedTime, setScores, squaresReached]);
 
   const isLegalKnightMove = (from: Square, to: Square): boolean => {
     if (
@@ -309,8 +311,8 @@ function App () {
           if (ps.won && ns.won) {
             return ps.time - ns.time
           }
-        }).map((s: Score) => {
-          return <div>
+        }).map((s: Score, index: number) => {
+          return <div key={index}>
             {s.won ? <span style={{color: 'green'}}>Won: </span> : 'Lost: '}
             {s.won? <span>Time: {formatTime(s.time)}</span> : <span>{s.squaresReached} Squares</span>}
           </div>;
