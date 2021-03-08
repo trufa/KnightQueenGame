@@ -195,7 +195,6 @@ function App () {
   const [move, setMove] = useState<Move>();
   const [squaresReached, setSquaresReached] = useState(0);
   const [scores, setScores] = useLocalStorage('score', []);
-  console.log(scores);
 
   useInterval(() => {
     setElapsedTime((t) => t + 100);
@@ -265,7 +264,10 @@ function App () {
     <div className="App">
       {won && <Confetti/>}
       <div style={{ padding: '20px', fontSize: '20px'}}>Knight and Queen Game</div>
-      <div style={{padding: '0 10% 20px 10%'}}>Objective: Get to every square of the board that is not attacked by the queen (without capturing it either), left to right, top to bottom</div>
+      <div style={{padding: '0 10% 20px 10%'}}>
+        Objective: Get to every square of the board that is not attacked by the queen (without capturing it either), left to right, top to bottom
+        <div><a href={"https://www.youtube.com/watch?v=SrQlpY_eGYU"} target={"_blank"} rel="noreferrer">Inspired by Ben Finegold</a></div>
+      </div>
       <div style={{ marginLeft: 'calc(50% - 256px)' }}>
         <Chessground
           fen={chess.fen()}
