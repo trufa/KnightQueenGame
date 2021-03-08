@@ -1,4 +1,4 @@
-import React, { Ref, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 //@ts-ignore
 import Chessground from 'react-chessground';
 import 'react-chessground/dist/styles/chessground.css';
