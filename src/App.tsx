@@ -184,6 +184,29 @@ const formatTime = (t: number) => {
   return (t / 1000).toFixed(1);
 };
 
+function getWindowDimensions() {
+  const { innerWidth: width, innerHeight: height } = window;
+  return {
+    width,
+    height
+  };
+}
+
+function useWindowDimensions() {
+  const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
+
+  useEffect(() => {
+    function handleResize() {
+      setWindowDimensions(getWindowDimensions());
+    }
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  return windowDimensions;
+}
+
 function App () {
   const [chess] = useState(Chess);
   const [lost, setLost] = useState(false);
@@ -197,6 +220,7 @@ function App () {
   const [squaresReached, setSquaresReached] = useState(0);
   const [scores, setScores] = useLocalStorage('score', []);
   const [nextSquareShape, setNextSquareShape] = useState<DrawShape>(createShape(neededSquares[neededSquaresIndex], null, 'green'))
+  const { height, width } = useWindowDimensions();
 
   useInterval(() => {
     setElapsedTime((t) => t + 100);
@@ -273,8 +297,10 @@ function App () {
         Objective: Get to every square of the board that is not attacked by the queen (without capturing it either), left to right, top to bottom
         <div><a href={"https://www.youtube.com/watch?v=SrQlpY_eGYU"} target={"_blank"} rel="noreferrer">Inspired by Ben Finegold</a></div>
       </div>
-      <div style={{ marginLeft: 'calc(50% - 256px)' }}>
+      <div style={{ marginLeft: `calc(50% - ${width < 512 ? (width/2) - 25 : 256}px)`}}>
         <Chessground
+          width={width < 512 ? width - 50 : 512}
+          height={width < 512 ? width - 50 : 512}
           fen={chess.fen()}
           movable={{
             free: !lost && !won,
