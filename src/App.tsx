@@ -46,7 +46,7 @@ const illegalToSquares: Square[] = [
 const neededSquares: Square[] = [
   'f8',
   'e8',
-  'c8',
+  /*'c8',
   'b8',
   'h7',
   'g7',
@@ -78,7 +78,7 @@ const neededSquares: Square[] = [
   'e1',
   'c1',
   'b1',
-  'a1',
+  'a1',*/
 ];
 
 const letterToNumber: {
@@ -188,13 +188,15 @@ function App () {
   const [chess] = useState(Chess);
   const [lost, setLost] = useState(false);
   const [won, setWon] = useState(false);
-  const [visitedSquares, setVisitedSquares] = useState<DrawShape[]>([createShape('h8', null, 'green')]);
+  const [finished, setFinished] = useState(false);
+  const [neededSquaresIndex, setNeededSquaresIndex] = useState(0)
   const [errorSquares, setErrorSquares] = useState<DrawShape[]>([]);
   const [elapsedTime, setElapsedTime] = useState<number>(0);
   const [isTimerRunning, setIsSetTimerRunning] = useState<boolean>(false);
   const [move, setMove] = useState<Move>();
   const [squaresReached, setSquaresReached] = useState(0);
   const [scores, setScores] = useLocalStorage('score', []);
+  const [nextSquareShape, setNextSquareShape] = useState<DrawShape>(createShape(neededSquares[neededSquaresIndex], null, 'green'))
 
   useInterval(() => {
     setElapsedTime((t) => t + 100);
@@ -205,13 +207,13 @@ function App () {
       setIsSetTimerRunning(true);
     }
 
-    if (won || lost) {
-      console.log(won, lost, won ? won : lost);
+    if (!finished && (won || lost)) {
       setScores((ss: Score[]) => ss.concat([{
         squaresReached,
         time: elapsedTime,
         won,
       }]));
+      setFinished(true)
     }
 
     if (move && move.orig === 'd5') {
@@ -233,17 +235,20 @@ function App () {
       setLost(true);
       return;
     }
-    if (move && move.dest === neededSquares[0]) {
+    if (move && move.dest === neededSquares[neededSquaresIndex]) {
       setSquaresReached((c) => c + 1);
-      neededSquares.shift();
-      setVisitedSquares((vs) => vs.concat(createShape(move.dest, null, 'green')));
-    }
-    if (neededSquares.length === 0) {
-      setIsSetTimerRunning(false);
-      setWon(true);
+      if (!(won || lost)) {
+        setNeededSquaresIndex(c => c + 1);
+        if (neededSquaresIndex + 1 < neededSquares.length) {
+          setNextSquareShape(createShape(neededSquares[neededSquaresIndex + 1], null, 'green'));
+        } else {
+          setIsSetTimerRunning(false);
+          setWon(true);
+        }
+      }
     }
 
-  }, [move, isTimerRunning, lost, won, elapsedTime, setScores, squaresReached]);
+  }, [move, won, lost]);
 
   const isLegalKnightMove = (from: Square, to: Square): boolean => {
     if (
@@ -277,7 +282,7 @@ function App () {
           turnColor="white"
           drawable={{
             enabled: false,
-            autoShapes: [...visitedSquares, ...errorSquares],
+            autoShapes: [nextSquareShape, ...errorSquares],
             brushes: {
               green: { key: 'g', color: '#15781B', opacity: 1, lineWidth: 10 },
               red: { key: 'r', color: '#f10055', opacity: 1, lineWidth: 10 },
