@@ -46,7 +46,7 @@ const illegalToSquares: Square[] = [
 const neededSquares: Square[] = [
   'f8',
   'e8',
-  /*'c8',
+  'c8',
   'b8',
   'h7',
   'g7',
@@ -78,7 +78,7 @@ const neededSquares: Square[] = [
   'e1',
   'c1',
   'b1',
-  'a1',*/
+  'a1',
 ];
 
 const letterToNumber: {
