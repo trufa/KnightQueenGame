@@ -294,7 +294,7 @@ function App () {
       {won && <Confetti/>}
       <div style={{ padding: '20px', fontSize: '20px'}}>Knight and Queen Game</div>
       <div style={{padding: '0 10% 20px 10%'}}>
-        Objective: Get to every square of the board that is not attacked by the queen (without capturing it either), left to right, top to bottom
+        Objective: Get to every square of the board that is not attacked by the queen (without capturing it either), right to left, top to bottom
         <div><a href={"https://www.youtube.com/watch?v=SrQlpY_eGYU"} target={"_blank"} rel="noreferrer">Inspired by Ben Finegold</a></div>
       </div>
       <div style={{ marginLeft: `calc(50% - ${width < 512 ? (width/2) - 25 : 256}px)`}}>
